@@ -1,0 +1,56 @@
+# Copy to configs/local.yaml and supply existing local input paths.
+# Relative paths resolve from the working directory. No automatic downloads.
+dataset: null
+weights: null                 # official weights.pt; config.json must be adjacent
+manifest: artifacts/cube-split.json
+cache: artifacts/cube-latents.h5
+device: auto
+cpu_threads: 4
+encode_batch_size: 64
+split:
+  seed: 20261120
+  train_episodes: 2000
+  val_episodes: 200
+  test_episodes: 200
+  exclude_episodes: []        # add episodes already used for earlier manual tuning
+model:
+  latent_dim: 192
+  action_dim: 5
+  action_block: 5
+  horizon: 5
+  width: 256
+  layers: 4
+  heads: 8
+  ff_dim: 1024
+  time_dim: 64
+train:
+  seed: 42
+  steps: 10000
+  batch_size: 256
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  warmup_steps: 500
+  grad_clip: 1.0
+  precision: auto             # CUDA bf16 when supported; otherwise fp32
+  val_every: 500
+  val_batches: 16
+  log_every: 100
+  state_loss_weight: 1.0
+  action_loss_weight: 1.0
+eval:
+  split: val                 # use test only after selecting settings on val
+  cases: 32
+  case_seed: 20261121
+  planner_seeds: [42, 43, 44]
+  methods: [cem, flow_direct, flow_ranked]
+  total_steps: 50
+  execute_steps: 5
+  success_distance_m: 0.04
+  render_backend: auto        # Linux GPU: egl; software rendering: osmesa
+  candidates: 16
+  flow_steps: 8
+  score_batch_size: 64
+  cem_samples: 300
+  cem_iterations: 10
+  cem_elites: 30
+  cem_min_std: 0.03

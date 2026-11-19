@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lewm-trajectory-proposals"
+version = "0.1.0"
+description = "Stage-one Cube experiments: joint trajectory proposals with a frozen LeWM evaluator"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.5,<3", "numpy>=1.26,<3", "h5py>=3.10,<4",
+  "hdf5plugin>=5,<8", "PyYAML>=6,<7", "einops>=0.8,<1",
+  "transformers==4.57.1", "Pillow>=10", "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+cube = ["mujoco==3.3.6", "dm-control==1.0.34", "ogbench==1.2.0", "gymnasium==1.1.1", "loguru>=0.7,<1"]
+dev = ["pytest>=8,<10", "ruff>=0.9"]
+download = ["huggingface-hub>=0.30,<1"]
+
+[project.scripts]
+lewm-proposals = "lewm_proposals.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["src/lewm_proposals/vendor"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
